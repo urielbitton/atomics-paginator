@@ -4,7 +4,7 @@ import PaginatorTable from "./Paginator"
 
 export default function App() {
  
-  return (
+  return ( 
     <PaginatorTable 
       options={[5,7,11]} 
       items={products}
