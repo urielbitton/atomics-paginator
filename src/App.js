@@ -1,6 +1,6 @@
 import React from "react"
 import {products} from './Products'
-import {PaginatorTable} from "./Paginator"
+import PaginatorTable from "./Paginator"
 
 export default function App() {
  

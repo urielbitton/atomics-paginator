@@ -1,14 +1,19 @@
 import React, {useState} from 'react'
 import "./styles.css"
 
-export function PaginatorTable(props) {
+export default function PaginatorTable(props) {
   
   const {options=[1], items=[], title, headers=[], btnColor="#333", activeBtnColor="#f5f5f5", activeIconColor="#fff"} = props
   const [limit, setLimit] = useState(options[0])
   const [page, setPage] = useState(0) 
 
   const optionsrow = options?.map(el => { 
-    return <option value={el}>{el}</option>
+    if(el==='all') {
+      return <option value={items.length}>{el}</option> 
+    }
+    else {
+      return <option value={el}>{el}</option>
+    }
   }) 
   const paginrows = Array.apply(null, { 
     length: (items.length%limit)===0?(items.length/limit):(items.length/limit)+1 
@@ -35,13 +40,12 @@ export function PaginatorTable(props) {
   })
   
   return (
-    <div className="atomics-app">
-      <div className="container">
+      <div className="rap-container">
         <div>
-        <header>
+        <div className="header">
           <h4>{title}</h4>
-        </header>
-        <div className="tablecont">
+        </div>
+        <div>
         <table>
           <thead>
             <tr>
@@ -54,7 +58,7 @@ export function PaginatorTable(props) {
         </table>
         </div>
         </div>
-        <footer>
+        <div className="footer">
         <div className="paginateactions">
           <div onClick={() => setPage(0)} style={{background:btnColor}}><i className="fal fa-fast-backward"></i></div>
           <div onClick={() => page>0&&setPage(prev => prev-1)} style={{background:btnColor}}><i className="fal fa-backward"></i></div>
@@ -74,8 +78,7 @@ export function PaginatorTable(props) {
           </label>
           <small>Showing {productsrow.length} of {items.length}</small>
         </div>
-        </footer>
+        </div>
       </div>
-    </div>
   )
 }
