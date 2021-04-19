@@ -10,10 +10,14 @@ export default function App() {
       items={products}
       headers={['SKU','Product','Price','Stock','Rating']}
       title="Products"
-      btnColor="#5628ee"
+      btnColor="#333"
       iconColor="#fff"
       activeBtnColor="#f1f1f1"
       activeIconColor="#333"
+      fastbtns={false}
+      textbtns={true}
+      backtext="back"
+      forwardtext="next"
     />
   );
 }

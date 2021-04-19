@@ -3,7 +3,25 @@ import "./styles.css"
 
 export default function PaginatorTable(props) {
   
-  const {options=[1], items=[], title, headers=[], btnColor="#333", activeBtnColor="#f5f5f5", activeIconColor="#fff"} = props
+  const {
+    options=[1], 
+    items=[], 
+    title,
+    headers=[], 
+    btnColor="#333", 
+    activeBtnColor="#f5f5f5", 
+    activeIconColor="#fff",
+    backicon="fal fa-backward",
+    fastbackicon="fal fa-fast-backward",
+    forwardicon="fal fa-forward",
+    fastforwardicon="fal fa-fast-forward",
+    fastbtns=true,
+    textbtns=false,
+    fastbacktext="",
+    backtext="",
+    forwardtext="",
+    fastforwardtext="" 
+  } = props
   const [limit, setLimit] = useState(options[0])
   const [page, setPage] = useState(0) 
 
@@ -27,7 +45,7 @@ export default function PaginatorTable(props) {
     </div>
   }) 
   const productsrow = items
-  .slice(limit*page,(limit*page+limit))
+  .slice(parseInt((limit*page),10),(parseInt((limit*page),10)+parseInt(limit,10)))
   .map(el => {
     return <tr> {
         Object.keys(el).map((key) => {
@@ -60,13 +78,37 @@ export default function PaginatorTable(props) {
         </div>
         <div className="footer">
         <div className="paginateactions">
-          <div onClick={() => setPage(0)} style={{background:btnColor}}><i className="fal fa-fast-backward"></i></div>
-          <div onClick={() => page>0&&setPage(prev => prev-1)} style={{background:btnColor}}><i className="fal fa-backward"></i></div>
+          <div onClick={() => setPage(0)} style={{background:btnColor, display: fastbtns?"flex":"none"}} className={textbtns&&"textbuttons"}>
+            {
+              !textbtns?
+              <i className={fastbackicon}></i>:
+              <h6>{fastbacktext}</h6>
+            }
+          </div>
+          <div onClick={() => page>0&&setPage(prev => prev-1)} style={{background:btnColor}} className={textbtns&&"textbuttons"}>
+            {
+              !textbtns?
+              <i className={backicon}></i>:
+              <h6>{backtext}</h6>
+            }
+          </div>
           <div className="paginator">
             {paginrows}
           </div>
-          <div onClick={() => page<(paginrows.length-1)&&setPage(prev => prev+1)} style={{background:btnColor}}><i className="fal fa-forward"></i></div>
-          <div onClick={() => setPage(paginrows.length-1)} style={{background:btnColor}}><i className="fal fa-fast-forward"></i></div>
+          <div onClick={() => page<(paginrows.length-1)&&setPage(prev => prev+1)} style={{background:btnColor}} className={textbtns&&"textbuttons"}>
+            {
+              !textbtns?
+              <i className={forwardicon}></i>:
+              <h6>{forwardtext}</h6>
+            }
+          </div>
+          <div onClick={() => setPage(paginrows.length-1)} style={{background:btnColor, display: fastbtns?"flex":"none"}} className={textbtns&&"textbuttons"}>
+            {
+              !textbtns?
+              <i className={fastforwardicon}></i>:
+              <h6>{fastforwardtext}</h6>
+            }
+          </div>
         </div>
         <div className="paginateinfo">
           <label> 
@@ -78,7 +120,7 @@ export default function PaginatorTable(props) {
           </label>
           <small>Showing {productsrow.length} of {items.length}</small>
         </div>
-        </div>
+        </div> 
       </div>
   )
 }

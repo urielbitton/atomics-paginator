@@ -115,3 +115,14 @@
   align-items: center;
   grid-gap: 30px;
 }
+.rap-container .paginateinfo h6 {
+  white-space: nowrap;
+}
+.rap-container .paginateactions > div.textbuttons {
+  width: auto;
+  padding: 0px 7px;
+}
+.rap-container .paginateactions > div h6 {
+  color: #fff;
+  font-weight: 500;
+} 
