@@ -9,8 +9,8 @@ export default function PaginatorTable(props) {
     title,
     headers=[], 
     btnColor="#333", 
-    activeBtnColor="#f5f5f5", 
-    activeIconColor="#fff",
+    activeBtnColor="#eee", 
+    activeIconColor="#333",
     backicon="fal fa-backward",
     fastbackicon="fal fa-fast-backward",
     forwardicon="fal fa-forward",
@@ -25,6 +25,7 @@ export default function PaginatorTable(props) {
   const [limit, setLimit] = useState(options[0])
   const [page, setPage] = useState(0) 
 
+  //select box to choose number of elements per page
   const optionsrow = options?.map(el => { 
     if(el==='all') {
       return <option value={items.length}>{el}</option> 
@@ -33,17 +34,26 @@ export default function PaginatorTable(props) {
       return <option value={el}>{el}</option>
     }
   }) 
+
+  //pagination number boxes
   const paginrows = Array.apply(null, { 
     length: (items.length%limit)===0?(items.length/limit):(items.length/limit)+1 
   }).map((el,i) => {
+    if((i+1)===1 || Math.abs(i-page) < 2 || (i+1)===((items.length%limit)===0?(items.length/limit):(items.length/limit)+1)) {
     return <div 
-      className={i===page&&'active'} 
+      className={`${i===page&&'active'}`} 
       onClick={() => setPage(i)}
       style={i===page?{background:activeBtnColor, color:activeIconColor}:{}}
     >
       {i+1}
     </div>
+    }
+    else if(((i+1)!==1 || Math.abs(i-page) > 2) && (i===1 || i>5)) {
+      return <small>...</small>
+    }
   }) 
+
+  //output of table tr rows
   const productsrow = items
   .slice(parseInt((limit*page),10),(parseInt((limit*page),10)+parseInt(limit,10)))
   .map(el => {
@@ -53,6 +63,8 @@ export default function PaginatorTable(props) {
         })
       } </tr>
   })
+
+  //output of table th headers
   const headersrow = Object.keys(headers).map((key) => {
     return <th>{headers[key]}</th> 
   })

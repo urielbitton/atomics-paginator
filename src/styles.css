@@ -107,8 +107,11 @@
   cursor: pointer;
   transition: all 0.2s;
 }
-.rap-container .paginator > div:hover, .paginator > div.active {
+.rap-container .paginator > div:hover, .rap-container .paginator > div.active {
   background: #ddd;
+}
+.rap-container .paginator > div.hidden {
+  display: none;
 }
 .rap-container .paginateinfo {
   display: flex;
