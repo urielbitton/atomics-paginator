@@ -1,27 +1,14 @@
 import React, {useState} from 'react'
-import "./styles.css"
 
 export default function PaginatorTable(props) {
-  
+
   const {
     options=[1], 
     items=[], 
     title,
-    headers=[], 
-    btnColor="#333", 
-    activeBtnColor="#eee", 
-    activeIconColor="#333",
-    backicon="fal fa-backward",
-    fastbackicon="fal fa-fast-backward",
-    forwardicon="fal fa-forward",
-    fastforwardicon="fal fa-fast-forward",
-    fastbtns=true,
-    textbtns=false,
-    fastbacktext="",
-    backtext="",
-    forwardtext="",
-    fastforwardtext="" 
+    headers=[]
   } = props
+
   const [limit, setLimit] = useState(options[0])
   const [page, setPage] = useState(0) 
 
@@ -37,36 +24,34 @@ export default function PaginatorTable(props) {
 
   //pagination number boxes
   const paginrows = Array.apply(null, { 
-    length: (items.length%limit)===0?(items.length/limit):(items.length/limit)+1 
+    length: ((items.length)%limit)===0?((items.length)/limit):((items.length)/limit)+1
   }).map((el,i) => {
-    if((i+1)===1 || Math.abs(i-page) < 2 || (i+1)===((items.length%limit)===0?(items.length/limit):(items.length/limit)+1)) {
+    if((i+1)===1 || Math.abs(i-page) < 2 || (i+1)===(((items.length)%limit)===0?((items.length)/limit):((items.length)/limit)+1)) {
     return <div 
       className={`${i===page&&'active'}`} 
       onClick={() => setPage(i)}
-      style={i===page?{background:activeBtnColor, color:activeIconColor}:{}}
     >
       {i+1}
-    </div>
+    </div>  
     }
-    else if(((i+1)!==1 || Math.abs(i-page) > 2) && (i===1 || i>5)) {
-      return <small>...</small>
+    else if((i===1 || i>(page+1)) && (i===(items.length) || (i<page+3))) { 
+      return <div><small>...</small></div>
     }
-  }) 
+  })
 
   //output of table tr rows
-  const productsrow = items
-  .slice(parseInt((limit*page),10),(parseInt((limit*page),10)+parseInt(limit,10)))
+  const itemsrow = items
+  ?.slice(parseInt((limit*page),10),(parseInt((limit*page),10)+parseInt(limit,10)))
   .map(el => {
-    return <tr> {
-        Object.keys(el).map((key) => {
-          return <td>{el[key]}</td> 
-        })
-      } </tr>
+    return <div className="tr"> {
+      Object.keys(el).map((key,i) => {
+        return <div className="td">{el[key]}</div>
+      })}</div>
   })
 
   //output of table th headers
   const headersrow = Object.keys(headers).map((key) => {
-    return <th>{headers[key]}</th> 
+    return <div className="th">{headers[key]}</div> 
   })
   
   return (
@@ -76,61 +61,46 @@ export default function PaginatorTable(props) {
           <h4>{title}</h4>
         </div>
         <div>
-        <table>
-          <thead>
-            <tr>
+        <div className="table hidescroll">
+          <div className="thead">
+            <div className="tr">
               {headersrow} 
-            </tr>
-          </thead>
-          <tbody>
-            {productsrow}
-          </tbody>
-        </table>
+            </div>
+          </div>
+          <div className="tbody">
+            {itemsrow}
+          </div>
+        </div>
         </div>
         </div>
         <div className="footer">
         <div className="paginateactions">
-          <div onClick={() => setPage(0)} style={{background:btnColor, display: fastbtns?"flex":"none"}} className={textbtns&&"textbuttons"}>
-            {
-              !textbtns?
-              <i className={fastbackicon}></i>:
-              <h6>{fastbacktext}</h6>
-            }
-          </div>
-          <div onClick={() => page>0&&setPage(prev => prev-1)} style={{background:btnColor}} className={textbtns&&"textbuttons"}>
-            {
-              !textbtns?
-              <i className={backicon}></i>:
-              <h6>{backtext}</h6>
-            }
-          </div>
-          <div className="paginator">
-            {paginrows}
-          </div>
-          <div onClick={() => page<(paginrows.length-1)&&setPage(prev => prev+1)} style={{background:btnColor}} className={textbtns&&"textbuttons"}>
-            {
-              !textbtns?
-              <i className={forwardicon}></i>:
-              <h6>{forwardtext}</h6>
-            }
-          </div>
-          <div onClick={() => setPage(paginrows.length-1)} style={{background:btnColor, display: fastbtns?"flex":"none"}} className={textbtns&&"textbuttons"}>
-            {
-              !textbtns?
-              <i className={fastforwardicon}></i>:
-              <h6>{fastforwardtext}</h6>
-            }
-          </div>
-        </div>
-        <div className="paginateinfo">
-          <label> 
-            <h6>Show</h6>
+          <div className="paginatorcont">
+            <div 
+              onClick={() => page>0&&setPage(prev => prev-1)}
+              className={`${!page>0&&"faded"}`}
+            >
+              <small><i className="fad fa-angle-left"></i></small>
+            </div>
+            <div className="paginator">
+              {paginrows}
+            </div>
+            <div 
+              onClick={() => page<(paginrows.length-1)&&setPage(prev => prev+1)} 
+              className={`${page<paginrows.length-1?"":"faded"}`}
+            >
+              <small><i className="fad fa-angle-right"></i></small>
+            </div>
+          </div> 
+          <label className="appselect">
+            <h6>Show: </h6>
             <select onChange={(e) => e.target.value*page>items.length?setPage(0,setLimit(e.target.value)):setLimit(e.target.value)}>
               {optionsrow} 
             </select>
-            <h6>per page</h6>
           </label>
-          <small>Showing {productsrow.length} of {items.length}</small>
+        </div>
+        <div className="paginateinfo">
+          <small>Showing {itemsrow.length} of {items.length}</small>
         </div>
         </div> 
       </div>
